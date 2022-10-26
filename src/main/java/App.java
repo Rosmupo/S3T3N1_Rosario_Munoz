@@ -180,17 +180,6 @@ public class App {
     }
 
 
-
-
-
-
-
-//////////////////FUNCIONALIDADES
-
-
-/////////////////MÉTODOS  DE CREACIÓN Y ELIMINACIÓN DE INSTANCIAS DE CLASE
-
-
     private static Florist createFlorist (){
         String name =askInfoString("Indique el nombre de su floristeria ");
         return  new Florist(name);
@@ -238,19 +227,6 @@ public class App {
         florist.addDecorationToList(decoration);
         return decoration;
     }
-
-
-
-    //Método que transforma los datos de un objeto en String para guardarlo en la base de datos txt
-
-    private static String dataConvert (){
-        String info;
-        Flower fl= florist.getFlowerList().get(0);
-        info = fl.getCode() + fl.getName() + fl.getPrice() + fl.getColor();
-        return info;
-    }
-
-
 
     //Método para escribir ficheros de texto
 
