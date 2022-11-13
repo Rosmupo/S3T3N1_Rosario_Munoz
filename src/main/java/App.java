@@ -1,6 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -9,18 +6,24 @@ public class App {
     //Variables globales
 
     static Scanner sc = new Scanner(System.in);
-    public static final String DIRECTORY = "/Users/Rosario/Pruebas/Catalogo";
+
     static Florist florist = null;
 
     public static void main(String[] args) throws IOException {
-
         int option, numFlower, numTree, numDecoration, index;
         boolean out = false;
 
-
         System.out.println("        ¡¡¡BIENVENIDOS A LA APLICACIÓN !!!");
-        System.out.println("Como se llama tu floristería");
-        florist = createFlorist();
+
+        if (MyFile.checkFile() == true) {
+
+            System.out.println("El archivo existe");
+            florist = MyFile.readFile();
+        } else {
+            MyFile.createFile();
+            florist = new Florist("database");
+            MyFile.writeFile(florist);
+        }
 
         while (!out) {
             System.out.println("""
@@ -79,8 +82,7 @@ public class App {
                 break;
             case 7:
                 System.out.println("Ha seleccionado la opción 7, guardar en txt e imprimir por consola todos los árboles, flores y decoración.");
-                String data = florist.getFlowerList().toString() + florist.getTreeList().toString()+florist.getDecorationList().toString();
-                writeFile(data);
+                MyFile.writeFile(florist);
                 florist.printFlowers();
                 florist.printDecoration();
                 florist.printTree();
@@ -179,13 +181,6 @@ public class App {
         }
     }
 
-
-    private static Florist createFlorist (){
-        String name =askInfoString("Indique el nombre de su floristeria ");
-        return  new Florist(name);
-    }
-
-
     private static Tree createTree(){
         String name = askInfoString("Indique el nombre del árbol");
         double price = askInfoDouble("Indique el precio");
@@ -193,8 +188,8 @@ public class App {
         int code= askInfoInt("Indique el código");
 
         return new Tree(name, price, height, code);
-
     }
+
     private static Flower createFlower(){
         String name = askInfoString("Indique el nombre de la flor");
         double price = askInfoDouble("Indique el precio");
@@ -214,7 +209,6 @@ public class App {
 
     }
 
-
     private static Flower addFlowerToFloristList(Flower flower, Florist florist ){
        florist.addFlowerToList(flower);
        return flower;
@@ -227,26 +221,6 @@ public class App {
         florist.addDecorationToList(decoration);
         return decoration;
     }
-
-    //Método para escribir ficheros de texto
-
-    private static void writeFile(String info) throws IOException {
-
-        try {
-            File file = new File(DIRECTORY);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(DIRECTORY);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(info);
-            bw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
 /////////MÉTODOS ENTRADA DE DATOS
